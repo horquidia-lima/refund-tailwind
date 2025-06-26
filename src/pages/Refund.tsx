@@ -1,4 +1,5 @@
 import { Input } from "../components/Input";
+import { Select } from "../components/Select";
 
 export function Refund() {
     return (
@@ -11,6 +12,11 @@ export function Refund() {
             <Input
                 required 
                 legend="NOME da solicitação"
+            />
+
+            <Select
+                required
+                legend="Categoria"
             />
         </form>
     )
