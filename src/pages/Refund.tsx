@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Input } from "../components/Input";
 import { Select } from "../components/Select";
 import { CATEGORIES_KEYS, CATEGORIES } from "../utils/categories";
+import { Upload } from "../components/Upload";
 
 export function Refund() {
     const [category, setCategory] = useState('')
@@ -34,6 +35,8 @@ export function Refund() {
                     legend="Valor"
                 />
             </div>
+
+            <Upload/>
         </form>
     )
 }
