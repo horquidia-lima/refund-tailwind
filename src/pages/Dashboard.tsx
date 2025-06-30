@@ -5,6 +5,7 @@ import searchSvg from '../assets/search.svg'
 import { RefundItem } from "../components/RefundItem"
 import { formatCurrency } from "../utils/formatCurrency"
 import { CATEGORIES } from "../utils/categories"
+import { Pagination } from "../components/Pagination"
 
 const REFUND_EXEMPLE = {
     id: "123",
@@ -37,6 +38,11 @@ export function Dashboard() {
             <div className="mt-6 flex flex-col gap-4 max-h-[342px] overflow-y-scroll">
                 <RefundItem data={REFUND_EXEMPLE}/>
             </div>
+
+            <Pagination 
+                current={1}
+                total={10}
+            />
         </div>
     )
 }
