@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Input } from "../components/Input";
 import { Select } from "../components/Select";
 import { CATEGORIES_KEYS, CATEGORIES } from "../utils/categories";
@@ -14,9 +14,14 @@ export function Refund() {
     const [filename, setFilename] = useState<File | null>(null)
 
     const navigate = useNavigate()
+    const params = useParams<{id: string}>()
 
     function onSubmit(e: React.FormEvent) {
         e.preventDefault()
+
+        if(params.id){
+            return navigate(-1)
+        }
         console.log(name, amount, category, filename)
         navigate('/confirm', {state: {fromSubmit: true}})
     }
@@ -32,6 +37,7 @@ export function Refund() {
                 legend="NOME da solicitação"
                 value={name}
                 onChange={e => setName(e.target.value)}
+                disabled={!!params.id}
             />
 
             <div className="flex gap-4">
@@ -40,6 +46,7 @@ export function Refund() {
                     legend="Categoria"
                     value={category}
                     onChange={e => setCategory(e.target.value)}
+                    disabled={!!params.id}
                 >
                     {CATEGORIES_KEYS.map((category) => (
                         <option key={category} value={category}>{CATEGORIES[category].name}</option>
@@ -51,6 +58,7 @@ export function Refund() {
                     legend="Valor"
                     value={amount}
                     onChange={e => setAmount(e.target.value)}
+                    disabled={!!params.id}
                 />
             </div>
 
@@ -59,7 +67,9 @@ export function Refund() {
                 onChange={(e) => e.target.files && setFilename(e.target.files[0])}
             />
 
-            <Button type="submit" isLoading={isloading}>Enviar</Button>
+            <Button type="submit" isLoading={isloading}>
+                {params.id ? "Voltar" : "Enviar"}
+            </Button>
         </form>
     )
 }
