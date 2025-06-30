@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import fileSvg from '../assets/file.svg'
 import { Input } from "../components/Input";
 import { Select } from "../components/Select";
 import { CATEGORIES_KEYS, CATEGORIES } from "../utils/categories";
@@ -62,10 +63,16 @@ export function Refund() {
                 />
             </div>
 
+            {params.id ? (
+                <a href="https://app.rocketseat.com.br/" target="_blank" className="text-sm text-green-200 font-semibold flex items-center justify-center gap-2 my-6 hover:opacity-70 transition ease-linear">
+                    <img src={fileSvg} alt="Icone de arquivo" />
+                    Abrir comprovante
+                </a>
+            ): (
             <Upload
                 filename={filename && filename.name}
                 onChange={(e) => e.target.files && setFilename(e.target.files[0])}
-            />
+            />)}
 
             <Button type="submit" isLoading={isloading}>
                 {params.id ? "Voltar" : "Enviar"}
