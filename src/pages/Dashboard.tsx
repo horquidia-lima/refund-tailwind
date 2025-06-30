@@ -17,10 +17,26 @@ const REFUND_EXEMPLE = {
 
 export function Dashboard() {
     const [name, setName] = useState('')
+    const [page, setPage] = useState(1)
+    const [totalOfPage, setTotalOfPage] = useState(10)
 
     function fetchRefunds(e: React.FormEvent) {
         e.preventDefault()
         console.log(name)
+    }
+
+    function handlePagination(action: 'next' | 'previous') {
+        setPage((prevPage) => {
+            if(action === "next" && prevPage < totalOfPage){
+                return prevPage + 1
+            }
+
+            if(action === "previous" && prevPage > 1){
+                return prevPage - 1
+            }
+
+            return prevPage
+        })
     }
 
     return (
@@ -40,8 +56,10 @@ export function Dashboard() {
             </div>
 
             <Pagination 
-                current={1}
-                total={10}
+                current={page}
+                total={totalOfPage}
+                onNext={() => handlePagination('next')}
+                onPrevious={() => handlePagination('previous')}
             />
         </div>
     )
