@@ -3,13 +3,14 @@ import { Input } from "../components/Input"
 import { Button } from "../components/Button"
 import searchSvg from '../assets/search.svg'
 import { RefundItem } from "../components/RefundItem"
+import { formatCurrency } from "../utils/formatCurrency"
 import { CATEGORIES } from "../utils/categories"
 
 const REFUND_EXEMPLE = {
     id: "123",
     name: "Quida",
     category: "Transporte",
-    amount: "100,00",
+    amount: formatCurrency(34.5),
     categoryImg: CATEGORIES["transport"].icon
 }
 
