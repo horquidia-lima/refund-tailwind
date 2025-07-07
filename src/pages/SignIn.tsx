@@ -1,16 +1,34 @@
 import { useActionState } from "react";
+import {z, ZodError} from "zod";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
+
+const signInSchema = z.object({
+    email: z.string().email({message: 'Informe um e-mail válido'}), 
+    password: z.string().trim().min(1, {message: 'Senha deve ter pelo menos 1 dígitos'}), 
+})
 
 export function SignIn() {
     const [state, formAction, isLoading] = useActionState(signIn,null)
 
-    function signIn(prevState: any, formData: FormData) {
-        const email = formData.get("email")
-        const password = formData.get("password")
+    async function signIn(_: any, formData: FormData) {
+        try {
+                const data = signInSchema.parse({
+                email: formData.get('email'),
+                password: formData.get('password'),
+            })
+        
+            console.log(data)
+        } catch (error) {
+            console.log(error)
 
-        console.log(email, password)
-        return {email, password}
+            if(error instanceof ZodError){
+                return {message: error.issues[0].message}
+            }
+
+            return {message: "Não foi possível fazer login"}
+        }
+        
     }
 
     return(
@@ -21,8 +39,9 @@ export function SignIn() {
                 legend="E-mail" 
                 type="email"
                 placeholder="seu@email.com"
-                defaultValue={String(state?.email)}
             />
+
+            <p className="text-sm text-red-600 text-center my-4 font-medium">{state?.message}</p>
 
              <Input 
                 name="password"
@@ -30,7 +49,6 @@ export function SignIn() {
                 legend="Senha" 
                 type="password"
                 placeholder="123456"
-                defaultValue={String(state?.password)}
             />
 
             <Button type="submit" isLoading={isLoading}>Entrar</Button>
