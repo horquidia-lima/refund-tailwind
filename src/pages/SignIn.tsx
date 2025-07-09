@@ -21,6 +21,7 @@ export function SignIn() {
             })
         
             const response = await api.post('/sessions', data)
+            console.log(response.data)
 
         } catch (error) {
             if(error instanceof ZodError){
