@@ -6,16 +6,10 @@ import { EmployeeRoutes } from "./EmployeeRoutes";
 import { ManagerRoutes } from "./ManagerRoutes";
 
 const isLoading = false
-//const session = undefined
 
-const session = {
-    user: {
-        role: "", /* manager | employee */
-    },
-}
 export function Routes() {
-   const context = useAuth()
-    console.log(context)
+   const {session} = useAuth()
+    
 
     function Route(){
         switch(session?.user.role){
