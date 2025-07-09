@@ -1,11 +1,18 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import {z, ZodError} from "zod"
 import fileSvg from '../assets/file.svg'
 import { Input } from "../components/Input";
 import { Select } from "../components/Select";
 import { CATEGORIES_KEYS, CATEGORIES } from "../utils/categories";
 import { Upload } from "../components/Upload";
 import { Button } from "../components/Button";
+
+const refundSchema = z.object({
+    name: z.string().trim().min(3, {message: 'Informe o nome'}),
+    amount: z.coerce.number({message: 'Informe um valor válido'}).positive({message: 'Informe um valor superior a zero'}),
+    category: z.string().min(1, {message: 'Selecione uma categoria'}),
+})
 
 export function Refund() {
     const [name, setName] = useState('')
@@ -23,8 +30,30 @@ export function Refund() {
         if(params.id){
             return navigate(-1)
         }
-        console.log(name, amount, category, filename)
-        navigate('/confirm', {state: {fromSubmit: true}})
+
+        try {
+            setIsLoading(true)
+
+            const data = refundSchema.parse({
+                name,
+                amount: amount.replace(',', '.'),
+                category
+            })
+
+        
+            navigate('/confirm', {state: {fromSubmit: true}})
+        } catch (error) {
+            console.log(error)
+
+            if(error instanceof ZodError) {
+                return alert(error.issues[0].message)
+            }
+
+            alert('Não foi possível solicitar o reembolso')
+        }finally{
+            setIsLoading(false)
+        }
+          
     }
     return (
         <form onSubmit={onSubmit} className="bg-gray-500 w-full rounded-xl flex flex-col p-10 gap-6 lg:min-w-[512px]">
