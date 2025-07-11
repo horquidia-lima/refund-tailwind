@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import {z, ZodError} from "zod"
+import { api } from "../services/api";
+import { AxiosError } from "axios";
 import fileSvg from '../assets/file.svg'
 import { Input } from "../components/Input";
 import { Select } from "../components/Select";
@@ -24,7 +26,7 @@ export function Refund() {
     const navigate = useNavigate()
     const params = useParams<{id: string}>()
 
-    function onSubmit(e: React.FormEvent) {
+    async function onSubmit(e: React.FormEvent) {
         e.preventDefault()
 
         if(params.id){
@@ -40,6 +42,10 @@ export function Refund() {
                 category
             })
 
+            await api.post("/refunds", {
+                ...data,
+                filename: "1234568796325418963257.png"
+            })
         
             navigate('/confirm', {state: {fromSubmit: true}})
         } catch (error) {
@@ -47,6 +53,10 @@ export function Refund() {
 
             if(error instanceof ZodError) {
                 return alert(error.issues[0].message)
+            }
+
+            if(error instanceof AxiosError){
+                return alert(error.response?.data.message)
             }
 
             alert('Não foi possível solicitar o reembolso')
